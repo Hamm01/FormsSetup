@@ -5,23 +5,26 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { projectSchema } from '@/schemas/project'
 import z from "zod"
 import { createProject } from "@/actions/project"
-import { toast } from "sonner"
+import { toast, Toaster } from "sonner"
 import { Divide } from "lucide-react"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 export default function Home() {
 
   const form = useForm({
     defaultValues: {
       name: "",
-      description: ""
+      description: "",
+      status: "draft" as const
     },
     resolver: zodResolver(projectSchema)
 
   })
   async function onSubmit(data: z.infer<typeof projectSchema>) {
     const res = await createProject(data)
+    console.log(data)
     if (res.success) {
       form.reset()
       toast.success("Project created Succesfully!", {
@@ -36,6 +39,7 @@ export default function Home() {
 
   return (
     <div className="container px-4 mx-auto my-6 ">
+      <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Controller
@@ -44,6 +48,20 @@ export default function Home() {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                 <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>)} />
+          <Controller
+            control={form.control}
+            name="description" render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name}>Description</FieldLabel>
+                  <FieldDescription>Be specific as possible</FieldDescription>
+
+                </FieldContent>
+                <Textarea {...field} id={field.name} aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
