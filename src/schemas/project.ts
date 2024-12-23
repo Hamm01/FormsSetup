@@ -6,5 +6,10 @@ export const projectSchema = z.object({
   description: z
     .string()
     .optional()
-    .transform(v => v || undefined)
+    .transform(v => v || undefined),
+  notification: z.object({
+    email: z.boolean(),
+    sms: z.boolean(),
+    push: z.boolean()
+  })
 })
