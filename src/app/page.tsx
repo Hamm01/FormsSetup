@@ -1,13 +1,16 @@
 "use client"
 
-import { Controller, useForm } from "react-hook-form"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { PROJECT_STATUSES, projectSchema } from '@/schemas/project'
 import z from "zod"
 import { createProject } from "@/actions/project"
 import { toast, Toaster } from "sonner"
 import { Divide } from "lucide-react"
-import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import {
+  Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend,
+  FieldSeparator, FieldSet
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -30,13 +33,15 @@ export default function Home() {
       status: "draft" as const,
       notification: {
         email: false,
-        sms: false,
         push: false,
+        sms: false,
       },
+      users: [{ email: "" }],
     },
     resolver: zodResolver(projectSchema)
-
   })
+
+  const { fields: users, append: addUser, remove: removeUser } = useFieldArray({ control: form.control, name: 'users' })
   async function onSubmit(data: z.infer<typeof projectSchema>) {
     const res = await createProject(data)
     console.log(data)
@@ -92,7 +97,7 @@ export default function Home() {
               <Field data-invalid={fieldState.invalid}>
                 <FieldContent>
                   <FieldLabel htmlFor={field.name}>Description</FieldLabel>
-                  <FieldDescription>Be specific as possible</FieldDescription>
+                  <FieldDescription >Be specific as possible</FieldDescription>
 
                 </FieldContent>
                 <Textarea {...field} id={field.name} aria-invalid={fieldState.invalid} />
@@ -105,51 +110,81 @@ export default function Home() {
               <FieldLegend>Notifications</FieldLegend>
               <FieldDescription>Select how you would like to recieve notifications</FieldDescription>
             </FieldContent>
+            <FieldGroup data-slot="checkbox-group">
+              <Controller
+                control={form.control}
+                name="notification.email" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                    <FieldContent>
+                      <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )} </FieldContent>
+
+
+                  </Field>)} />
+              <Controller
+                control={form.control}
+                name="notification.sms" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                    <FieldContent>
+                      <FieldLabel htmlFor={field.name}>Sms</FieldLabel>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )} </FieldContent>
+
+
+                  </Field>)} />
+              <Controller
+                control={form.control}
+                name="notification.push" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                    <FieldContent>
+                      <FieldLabel htmlFor={field.name}>In App</FieldLabel>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )} </FieldContent>
+
+
+                  </Field>)} />
+            </FieldGroup>
           </FieldSet>
-          <FieldGroup data-slot="checkbox-group">
-            <Controller
-              control={form.control}
-              name="notification.email" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )} </FieldContent>
-
-
-                </Field>)} />
-            <Controller
-              control={form.control}
-              name="notification.sms" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name}>Sms</FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )} </FieldContent>
-
-
-                </Field>)} />
-            <Controller
-              control={form.control}
-              name="notification.push" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name}>In App</FieldLabel>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )} </FieldContent>
-
-
-                </Field>)} />
-          </FieldGroup>
+          <FieldSeparator />
+          <FieldSet>
+            <div className="flex justify-between gap-2 items-center">
+              <FieldContent>
+                <FieldLegend variant="label" className="mb-0">User Email Addresses</FieldLegend>
+                <FieldDescription>
+                  Add up yo 5 users to this project (including yourself)
+                </FieldDescription>
+                {form.formState.errors.users?.root && (
+                  <FieldError errors={[form.formState.errors.users?.root]} />
+                )}
+              </FieldContent>
+              <Button type="button" variant="outline" size="sm" onClick={() => addUser({ email: "" })}>Add user</Button>
+            </div>
+            <FieldGroup>
+              {users.map((user, index) => (
+                <Controller
+                  control={form.control}
+                  key={user.id}
+                  name={`users.${index}.email`} render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                      <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>)} />
+              ))}
+            </FieldGroup>
+          </FieldSet>
           <Button>Create</Button>
         </FieldGroup>
       </form>
