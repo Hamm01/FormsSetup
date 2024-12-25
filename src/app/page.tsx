@@ -7,7 +7,7 @@ import z from "zod"
 import { createProject } from "@/actions/project"
 import { toast, Toaster } from "sonner"
 import { Divide } from "lucide-react"
-import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -20,13 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Checkbox } from "@/components/ui/checkbox"
 export default function Home() {
 
   const form = useForm({
     defaultValues: {
       name: "",
       description: "",
-      status: "draft" as const
+      status: "draft" as const,
+      notification: {
+        email: false,
+        sms: false,
+        push: false,
+      },
     },
     resolver: zodResolver(projectSchema)
 
@@ -94,6 +100,56 @@ export default function Home() {
                   <FieldError errors={[fieldState.error]} />
                 )}
               </Field>)} />
+          <FieldSet>
+            <FieldContent>
+              <FieldLegend>Notifications</FieldLegend>
+              <FieldDescription>Select how you would like to recieve notifications</FieldDescription>
+            </FieldContent>
+          </FieldSet>
+          <FieldGroup data-slot="checkbox-group">
+            <Controller
+              control={form.control}
+              name="notification.email" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )} </FieldContent>
+
+
+                </Field>)} />
+            <Controller
+              control={form.control}
+              name="notification.sms" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name}>Sms</FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )} </FieldContent>
+
+
+                </Field>)} />
+            <Controller
+              control={form.control}
+              name="notification.push" render={({ field: { value, onChange, ...field }, fieldState }) => (
+                <Field data-invalid={fieldState.invalid} orientation="horizontal">
+
+                  <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name}>In App</FieldLabel>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )} </FieldContent>
+
+
+                </Field>)} />
+          </FieldGroup>
           <Button>Create</Button>
         </FieldGroup>
       </form>
