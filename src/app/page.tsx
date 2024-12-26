@@ -6,7 +6,7 @@ import { PROJECT_STATUSES, projectSchema } from '@/schemas/project'
 import z from "zod"
 import { createProject } from "@/actions/project"
 import { toast, Toaster } from "sonner"
-import { Divide } from "lucide-react"
+import { Divide, XIcon } from "lucide-react"
 import {
   Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend,
   FieldSeparator, FieldSet
@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 export default function Home() {
 
   const form = useForm({
@@ -176,8 +177,16 @@ export default function Home() {
                   key={user.id}
                   name={`users.${index}.email`} render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                      <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
+                      <InputGroup>
+                        <InputGroupInput {...field}
+                          id={field.name}
+                          aria-invalid={fieldState.invalid}
+                          aria-label={`User ${index + 1} email`} />
+
+                        <InputGroupAddon align="inline-end">
+                          <InputGroupButton type="button" variant="ghost" size="icon-xs" onClick={() => removeUser(index)} aria-label={`Remove User ${index + 1}`}><XIcon /></InputGroupButton>
+                        </InputGroupAddon>
+                      </InputGroup>
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
