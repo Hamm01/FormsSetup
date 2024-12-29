@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
+import { FormInput } from "@/components/form"
 export default function Home() {
 
   const form = useForm({
@@ -63,16 +64,9 @@ export default function Home() {
       <Toaster />
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
-          <Controller
-            control={form.control}
-            name="name" render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                <Input {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>)} />
+
+          <FormInput control={form.control} name="name" label="Name" />
+
           <Controller
             control={form.control}
             name="status" render={({ field: { onChange, onBlur, ...field }, fieldState }) => (
