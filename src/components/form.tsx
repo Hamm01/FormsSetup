@@ -16,6 +16,9 @@ type FormBaseProps<TFieldValues extends FieldValues = FieldValues, TName extends
             id: string
         }) => ReactNode
     }
+
+type FormControlFunc = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>(props: FormControlProps<TFieldValues, TName, TTransformedValues>) => ReactNode
+
 function FormBase<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>({ children, control, label, name }: FormBaseProps<TFieldValues, TName, TTransformedValues>) {
     return (
         <Controller
@@ -31,12 +34,9 @@ function FormBase<TFieldValues extends FieldValues = FieldValues, TName extends 
     )
 }
 
-
-export function FormInput<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>(props: FormControlProps<TFieldValues, TName, TTransformedValues>) {
-
-    return (
-        <FormBase {...props}>
-            {field => <Input {...field} />}
-        </FormBase>
-    )
+export const FormInput: FormControlFunc = (props) => {
+    return <FormBase {...props}>
+        {field => <Input {...field} />}
+    </FormBase>
 }
+
