@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
-import { FormInput } from "@/components/form"
+import { FormInput, FormTextArea } from "@/components/form"
 export default function Home() {
 
   const form = useForm({
@@ -86,6 +86,7 @@ export default function Home() {
                   <FieldError errors={[fieldState.error]} />
                 )}
               </Field>)} />
+          <FormTextArea name="description" control={form.control} label="Description" description="Be specific as possible" />
           <Controller
             control={form.control}
             name="description" render={({ field, fieldState }) => (
