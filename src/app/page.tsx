@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
-import { FormInput, FormTextArea } from "@/components/form"
+import { FormInput, FormSelect, FormTextArea } from "@/components/form"
 export default function Home() {
 
   const form = useForm({
@@ -66,26 +66,13 @@ export default function Home() {
         <FieldGroup>
 
           <FormInput control={form.control} name="name" label="Name" />
+          <FormSelect control={form.control}
+            name="status" label="status">
+            {PROJECT_STATUSES.map(status => (
+              <SelectItem key={status} value={status}>{status}</SelectItem>
+            ))}
+          </FormSelect>
 
-          <Controller
-            control={form.control}
-            name="status" render={({ field: { onChange, onBlur, ...field }, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Status</FieldLabel>
-                <Select {...field} onValueChange={onChange}>
-                  <SelectTrigger aria-invalid={fieldState.invalid} onBlur={onBlur} id={field.name}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PROJECT_STATUSES.map(status => (
-                      <SelectItem key={status} value={status}>{status}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>)} />
           <FormTextArea name="description" control={form.control} label="Description" description="Be specific as possible" />
           <Controller
             control={form.control}
