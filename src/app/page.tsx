@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
-import { FormInput, FormSelect, FormTextArea } from "@/components/form"
+import { FormCheckbox, FormInput, FormSelect, FormTextArea } from "@/components/form"
 export default function Home() {
 
   const form = useForm({
@@ -74,68 +74,16 @@ export default function Home() {
           </FormSelect>
 
           <FormTextArea name="description" control={form.control} label="Description" description="Be specific as possible" />
-          <Controller
-            control={form.control}
-            name="description" render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Description</FieldLabel>
-                  <FieldDescription >Be specific as possible</FieldDescription>
 
-                </FieldContent>
-                <Textarea {...field} id={field.name} aria-invalid={fieldState.invalid} />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>)} />
           <FieldSet>
             <FieldContent>
               <FieldLegend>Notifications</FieldLegend>
               <FieldDescription>Select how you would like to recieve notifications</FieldDescription>
             </FieldContent>
             <FieldGroup data-slot="checkbox-group">
-              <Controller
-                control={form.control}
-                name="notification.email" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                    <FieldContent>
-                      <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )} </FieldContent>
-
-
-                  </Field>)} />
-              <Controller
-                control={form.control}
-                name="notification.sms" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                    <FieldContent>
-                      <FieldLabel htmlFor={field.name}>Sms</FieldLabel>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )} </FieldContent>
-
-
-                  </Field>)} />
-              <Controller
-                control={form.control}
-                name="notification.push" render={({ field: { value, onChange, ...field }, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} orientation="horizontal">
-
-                    <Checkbox {...field} id={field.name} checked={value} onCheckedChange={onChange} aria-invalid={fieldState.invalid} />
-                    <FieldContent>
-                      <FieldLabel htmlFor={field.name}>In App</FieldLabel>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )} </FieldContent>
-
-
-                  </Field>)} />
+              <FormCheckbox control={form.control} label="Email" name="notification.email" />
+              <FormCheckbox control={form.control} label="Text" name="notification.sms" />
+              <FormCheckbox control={form.control} label="InApp" name="notification.push" />
             </FieldGroup>
           </FieldSet>
           <FieldSeparator />
