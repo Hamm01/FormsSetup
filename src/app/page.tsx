@@ -6,24 +6,15 @@ import { PROJECT_STATUSES, projectSchema } from '@/schemas/project'
 import z from "zod"
 import { createProject } from "@/actions/project"
 import { toast, Toaster } from "sonner"
-import { Divide, XIcon } from "lucide-react"
+import { XIcon } from "lucide-react"
 import {
-  Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend,
+  Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLegend,
   FieldSeparator, FieldSet
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+
 import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
+
+import { SelectItem } from "@/components/ui/select"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { FormCheckbox, FormInput, FormSelect, FormTextArea } from "@/components/form"
 export default function Home() {
