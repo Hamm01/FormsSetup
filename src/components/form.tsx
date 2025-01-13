@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { Textarea } from "./ui/textarea";
 
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
+import { Checkbox } from "./ui/checkbox";
 
 type FormControlProps<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues> = {
     name: TName,
@@ -15,6 +16,8 @@ type FormControlProps<TFieldValues extends FieldValues = FieldValues, TName exte
 
 type FormBaseProps<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues> =
     FormControlProps<TFieldValues, TName, TTransformedValues> & {
+        horizontal?: boolean
+        controlFirst?: boolean
         children: (field: Parameters<ControllerProps<TFieldValues, TName, TTransformedValues>["render"]>[0]["field"] & {
             "aria-invalid": boolean,
             id: string
@@ -23,23 +26,40 @@ type FormBaseProps<TFieldValues extends FieldValues = FieldValues, TName extends
 
 type FormControlFunc<ExtraProps extends Record<string, unknown> = Record<never, never>> = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>(props: FormControlProps<TFieldValues, TName, TTransformedValues> & ExtraProps) => ReactNode
 
-function FormBase<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>({ children, control, label, name, description }: FormBaseProps<TFieldValues, TName, TTransformedValues>) {
+function FormBase<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>, TTransformedValues = TFieldValues>({ children, control, label, name, description, controlFirst, horizontal }: FormBaseProps<TFieldValues, TName, TTransformedValues>) {
+
     return (
         <Controller
             control={control}
-            name={name} render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                    <FieldContent>
-                        <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-                        {description &&
-                            <FieldDescription >{description}</FieldDescription>
-                        }
-                    </FieldContent>
-                    {children({ ...field, id: field.name, "aria-invalid": fieldState.invalid })}
-                    {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                    )}
-                </Field>)} />
+            name={name} render={({ field, fieldState }) => {
+                const labelElement = (<FieldContent>
+                    <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+                    {description &&
+                        <FieldDescription >{description}</FieldDescription>
+                    }
+                </FieldContent>)
+                const control = children({ ...field, id: field.name, "aria-invalid": fieldState.invalid })
+                const errElement = fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                )
+
+                return (
+                    <Field data-invalid={fieldState.invalid} orientation={horizontal ? "horizontal" : undefined}>
+                        {controlFirst ? (<>
+                            {control}
+                            <FieldContent>
+                                {labelElement}
+                                {errElement}
+                            </FieldContent>
+                        </>)
+                            : (<>
+                                <FieldContent>{labelElement}</FieldContent>
+                                {control}
+                                {errElement}
+                            </>)}
+
+                    </Field>)
+            }} />
     )
 }
 
@@ -76,3 +96,15 @@ export const FormSelect: FormControlFunc<{ children: ReactNode }> = ({
     </FormBase>
 }
 
+export const FormCheckbox: FormControlFunc = props => {
+
+    return (
+        <FormBase {...props} horizontal controlFirst>
+            {({ onChange, value, ...field }) => (
+                <Checkbox {...field} checked={value} onCheckedChange={onChange} aria-invalid={field["aria-invalid"]} />
+            )
+            }
+
+        </FormBase>
+    )
+}
