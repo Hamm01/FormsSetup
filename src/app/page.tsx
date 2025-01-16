@@ -6,17 +6,18 @@ import { createProject } from "@/actions/project"
 import { toast, Toaster } from "sonner"
 import { XIcon } from "lucide-react"
 import {
-  Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLegend,
+  Field, FieldContent, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend,
   FieldSeparator, FieldSet
 } from "@/components/ui/field"
 
 import { Button } from "@/components/ui/button"
-
-import { SelectItem } from "@/components/ui/select"
+import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
+import { SelectItem } from "@/components/ui/select"
 import { FormCheckbox, FormInput, FormSelect, FormTextArea } from "@/components/form"
-
 import { useForm } from '@tanstack/react-form'
+
+
 
 type FormData = z.infer<typeof projectSchema>
 export default function Home() {
@@ -59,7 +60,17 @@ export default function Home() {
         form.handleSubmit()
       }}>
         <FieldGroup>
+          <form.Field name='name'>
+            {field => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+              return <Field data-invalid={isInvalid}>
+                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                <Input id={field.name} name={field.name} value={field.state.value} onBlur={field.handleBlur} onChange={e => field.handleChange(e.target.value)} aria-invalid={isInvalid} />
+                {isInvalid && <FieldError errors={field.state.meta.errors} />}
 
+              </Field>
+            }}
+          </form.Field>
           <FormSelect control={form.control}
             name="status" label="status">
             {PROJECT_STATUSES.map(status => (
