@@ -1,7 +1,5 @@
 "use client"
 
-import { Controller, useFieldArray, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { PROJECT_STATUSES, projectSchema } from '@/schemas/project'
 import z from "zod"
 import { createProject } from "@/actions/project"
@@ -17,6 +15,10 @@ import { Button } from "@/components/ui/button"
 import { SelectItem } from "@/components/ui/select"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
 import { FormCheckbox, FormInput, FormSelect, FormTextArea } from "@/components/form"
+
+import { useForm } from '@tanstack/react-form'
+
+type FormData = z.infer<typeof projectSchema>
 export default function Home() {
 
   const form = useForm({
@@ -30,33 +32,34 @@ export default function Home() {
         sms: false,
       },
       users: [{ email: "" }],
+    } satisfies FormData as FormData,
+    validators: {
+      onSubmit: projectSchema
     },
-    resolver: zodResolver(projectSchema)
-  })
+    onSubmit: async ({ value }) => {
+      const res = await createProject(value)
+      if (res.success) {
+        form.reset()
+        toast.success("Project created Succesfully!", {
+          description: JSON.stringify(value, null, 2),
+          className: "whitespace-pre-wrap font-mono"
+        })
 
-  const { fields: users, append: addUser, remove: removeUser } = useFieldArray({ control: form.control, name: 'users' })
-  async function onSubmit(data: z.infer<typeof projectSchema>) {
-    const res = await createProject(data)
-    console.log(data)
-    if (res.success) {
-      form.reset()
-      toast.success("Project created Succesfully!", {
-        description: JSON.stringify(data, null, 2),
-        className: "whitespace-pre-wrap font-mono"
-      })
-
-    } else {
-      toast.error("failed to create project")
+      } else {
+        toast.error("failed to create project")
+      }
     }
-  }
+  })
 
   return (
     <div className="container px-4 mx-auto my-6 ">
       <Toaster />
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={e => {
+        e.preventDefault()
+        form.handleSubmit()
+      }}>
         <FieldGroup>
 
-          <FormInput control={form.control} name="name" label="Name" />
           <FormSelect control={form.control}
             name="status" label="status">
             {PROJECT_STATUSES.map(status => (
