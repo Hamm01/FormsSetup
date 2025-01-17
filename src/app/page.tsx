@@ -16,13 +16,14 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "
 import { SelectItem } from "@/components/ui/select"
 import { FormCheckbox, FormInput, FormSelect, FormTextArea } from "@/components/form"
 import { useForm } from '@tanstack/react-form'
+import { useAppForm } from '@/components/form/hooks'
 
 
 
 type FormData = z.infer<typeof projectSchema>
 export default function Home() {
 
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       name: "",
       description: "",
@@ -60,7 +61,7 @@ export default function Home() {
         form.handleSubmit()
       }}>
         <FieldGroup>
-          <form.Field name='name'>
+          <form.AppField name='name'>
             {field => {
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
               return <Field data-invalid={isInvalid}>
