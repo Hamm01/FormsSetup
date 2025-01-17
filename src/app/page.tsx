@@ -63,6 +63,7 @@ export default function Home() {
         <FieldGroup>
           <form.AppField name='name'>
             {field => {
+              <field.Input />
               const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
               return <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -71,8 +72,8 @@ export default function Home() {
 
               </Field>
             }}
-          </form.Field>
-          <FormSelect control={form.control}
+          </form.AppField>
+          {/* <FormSelect control={form.control}
             name="status" label="status">
             {PROJECT_STATUSES.map(status => (
               <SelectItem key={status} value={status}>{status}</SelectItem>
@@ -129,7 +130,7 @@ export default function Home() {
                     </Field>)} />
               ))}
             </FieldGroup>
-          </FieldSet>
+          </FieldSet> */}
           <Button>Create</Button>
         </FieldGroup>
       </form>
