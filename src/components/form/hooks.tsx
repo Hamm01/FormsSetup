@@ -1,5 +1,6 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
-import { Input } from "../ui/input";
+import { FormInput } from "./FormInput";
+
 
 const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
 
