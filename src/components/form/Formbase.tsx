@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { useFieldContext } from "./hooks"
 import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "../ui/field"
 
-type FormControlProps = {
+export type FormControlProps = {
     label: string
     description?: string
 }
