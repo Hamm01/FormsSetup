@@ -1,12 +1,15 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { FormInput } from "./FormInput";
+import { FormTextArea } from "../form";
+import { FormTextarea } from "./FormTextarea";
 
 
 const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
 
 const { useAppForm } = createFormHook({
     fieldComponents: {
-        Input: FormInput
+        Input: FormInput,
+        Textarea: FormTextarea
     },
     formComponents: {},
     fieldContext,
