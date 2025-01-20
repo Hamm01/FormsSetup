@@ -64,6 +64,9 @@ export default function Home() {
           <form.AppField name='name'>
             {field => <field.Input label='Name' />}
           </form.AppField>
+          <form.AppField name='name'>
+            {field => <field.Textarea label='description' description='Be specific as possible' />}
+          </form.AppField>
 
           {/* <FormSelect control={form.control}
             name="status" label="status">
