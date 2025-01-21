@@ -1,7 +1,7 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { FormInput } from "./FormInput";
-import { FormTextArea } from "../form";
 import { FormTextarea } from "./FormTextarea";
+import { FormSelect } from "./FormSelect";
 
 
 const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
@@ -9,7 +9,8 @@ const { fieldContext, formContext, useFieldContext, useFormContext } = createFor
 const { useAppForm } = createFormHook({
     fieldComponents: {
         Input: FormInput,
-        Textarea: FormTextarea
+        Textarea: FormTextarea,
+        Select: FormSelect,
     },
     formComponents: {},
     fieldContext,
