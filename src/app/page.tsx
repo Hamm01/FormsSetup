@@ -74,20 +74,27 @@ export default function Home() {
           <form.AppField name='description'>
             {field => <field.Textarea label='description' description='Be specific as possible' />}
           </form.AppField>
-
-          {/*
-
           <FieldSet>
             <FieldContent>
               <FieldLegend>Notifications</FieldLegend>
               <FieldDescription>Select how you would like to recieve notifications</FieldDescription>
             </FieldContent>
             <FieldGroup data-slot="checkbox-group">
-              <FormCheckbox control={form.control} label="Email" name="notification.email" />
-              <FormCheckbox control={form.control} label="Text" name="notification.sms" />
-              <FormCheckbox control={form.control} label="InApp" name="notification.push" />
+              <form.AppField name='notification.email'>
+                {field => <field.CheckBox label='Email' />}
+              </form.AppField>
+              <form.AppField name='notification.sms'>
+                {field => <field.CheckBox label='Sms' />}
+              </form.AppField>
+              <form.AppField name='notification.push'>
+                {field => <field.CheckBox label='InApp' />}
+              </form.AppField>
             </FieldGroup>
           </FieldSet>
+
+          {/*
+
+          
           <FieldSeparator />
           <FieldSet>
             <div className="flex justify-between gap-2 items-center">
