@@ -84,10 +84,10 @@ export default function Home() {
                 {field => <field.CheckBox label='Email' />}
               </form.AppField>
               <form.AppField name='notification.sms'>
-                {field => <field.CheckBox label='Sms' />}
+                {field => <field.CheckBox label='Text' />}
               </form.AppField>
               <form.AppField name='notification.push'>
-                {field => <field.CheckBox label='InApp' />}
+                {field => <field.CheckBox label='In App' />}
               </form.AppField>
             </FieldGroup>
           </FieldSet>
