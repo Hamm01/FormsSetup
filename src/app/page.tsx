@@ -91,48 +91,54 @@ export default function Home() {
               </form.AppField>
             </FieldGroup>
           </FieldSet>
-
-          {/*
-
-          
           <FieldSeparator />
-          <FieldSet>
-            <div className="flex justify-between gap-2 items-center">
-              <FieldContent>
-                <FieldLegend variant="label" className="mb-0">User Email Addresses</FieldLegend>
-                <FieldDescription>
-                  Add up yo 5 users to this project (including yourself)
-                </FieldDescription>
-                {form.formState.errors.users?.root && (
-                  <FieldError errors={[form.formState.errors.users?.root]} />
-                )}
-              </FieldContent>
-              <Button type="button" variant="outline" size="sm" onClick={() => addUser({ email: "" })}>Add user</Button>
-            </div>
-            <FieldGroup>
-              {users.map((user, index) => (
-                <Controller
-                  control={form.control}
-                  key={user.id}
-                  name={`users.${index}.email`} render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <InputGroup>
-                        <InputGroupInput {...field}
-                          id={field.name}
-                          aria-invalid={fieldState.invalid}
-                          aria-label={`User ${index + 1} email`} />
+          <form.AppField name="users" mode='array'>
+            {field => {
+              return (<FieldSet>
+                <div className="flex justify-between gap-2 items-center">
+                  <FieldContent>
+                    <FieldLegend variant="label" className="mb-0">User Email Addresses</FieldLegend>
+                    <FieldDescription>
+                      Add up yo 5 users to this project (including yourself)
+                    </FieldDescription>
+                    {field.state.meta.errors && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </FieldContent>
+                  <Button type="button" variant="outline" size="sm" onClick={() => field.pushValue({ email: "" })}>Add user</Button>
+                </div>
+                <FieldGroup>
+                  {field.state.value.map((_, index) => (
+                    <form.AppField
+                      key={index}
+                      name={`users[${index}].email`}>
+                      {innerField => {
+                        const inInvalid = innerField.state.meta.isTouched && !!innerField.state.meta.isValid
+                        return (<Field data-invalid={inInvalid}>
+                          <InputGroup>
+                            <InputGroupInput
+                              id={field.name}
+                              aria-invalid={inInvalid}
+                              onBlur={innerField.handleBlur}
+                              onChange={e => innerField.handleChange(e.target.value)}
+                              aria-label={`User ${index + 1} email`}
+                            />
 
-                        <InputGroupAddon align="inline-end">
-                          <InputGroupButton type="button" variant="ghost" size="icon-xs" onClick={() => removeUser(index)} aria-label={`Remove User ${index + 1}`}><XIcon /></InputGroupButton>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>)} />
-              ))}
-            </FieldGroup>
-          </FieldSet> */}
+                            <InputGroupAddon align="inline-end">
+                              <InputGroupButton type="button" variant="ghost" size="icon-xs" onClick={() => field.removeValue(index)} aria-label={`Remove User ${index + 1}`}><XIcon /></InputGroupButton>
+                            </InputGroupAddon>
+                          </InputGroup>
+                          {inInvalid && (
+                            <FieldError errors={innerField.state.meta.errors} />
+                          )}
+                        </Field>)
+                      }}
+                    </form.AppField>
+                  ))}
+                </FieldGroup>
+              </FieldSet>)
+            }}
+          </form.AppField>
           <Button>Create</Button>
         </FieldGroup>
       </form>
