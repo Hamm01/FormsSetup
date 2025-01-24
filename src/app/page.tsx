@@ -119,9 +119,10 @@ export default function Home() {
                             <InputGroupInput
                               id={field.name}
                               aria-invalid={inInvalid}
+                              aria-label={`User ${index + 1} email`}
                               onBlur={innerField.handleBlur}
                               onChange={e => innerField.handleChange(e.target.value)}
-                              aria-label={`User ${index + 1} email`}
+                              value={innerField.state.value}
                             />
 
                             <InputGroupAddon align="inline-end">
