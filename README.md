@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔷 Universal Shadcn Form field with RHF and Tanstack Forms
 
-## Getting Started
+A scalable, type-safe form architecture built on top of **Shadcn UI** that works seamlessly with:
 
-First, run the development server:
+- ✅ React Hook Form
+- ✅ TanStack Form
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This project focuses on building a **single reusable input system** that supports **multiple form libraries** without duplicating components or logic.
+
+---
+
+## ✨ Core Highlights
+
+- Built using **TypeScript Generics**
+- Supports **React Hook Form** and **TanStack Form**
+- Uses **Shadcn UI’s Field system**
+- Modular layered architecture
+- Fully reusable & scalable input components
+- No form-library lock-in
+- Strong focus on accessibility and error handling
+
+---
+
+## 📁 Folder Structure
+
+```txt
+src/
+ ├── components/
+ │   ├── ui/              → Shadcn UI primitives
+ │   ├── inputs/          → Base reusable input components
+ │   ├── form/            → tanstack Hooks and input components
+ │   │   ├── tanstack/    → TanStack Form adapters
+ │   │   └── shared/      → Shared types and utilities
+ |   |   └── form.tsx     → all the Types and form base inputs for react hook form
+ ├── schemas /            → Form project schema file
+
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Components used:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+<Field>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+<FieldLabel>
 
-## Learn More
+<FieldDescription>
 
-To learn more about Next.js, take a look at the following resources:
+<FieldError>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<InputGroup>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<InputGroupAddon>
+```
 
-## Deploy on Vercel
+This keeps UI consistent across your entire app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🧩 Shared TypeScript System
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Your form fields are powered by generics like:
+
+```ts
+type FormControlProps<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>
+> = {
+  name: TName
+  label: string
+}
+```
+
+This ensures:
+
+- Autocomplete for field names
+
+- Strong type safety
+
+- No invalid field access
+
+- Better developer experience
+
+🛠 Technologies Used
+
+- React
+- TypeScript
+- Shadcn UI
+- React Hook Form
+- TanStack Form
+- Tailwind CSS
+
+❤️ Author
+
+Built by Himanish
+Focused on clean UI architecture and type-safe scalable systems.
